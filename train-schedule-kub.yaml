@@ -1,1 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: train-schedule-service
+spec:
+ type: NodePort
+ selector:
+  app: train-schedule
+ port:
+  - port: 8080
+    nodePort: 8080
+    protocol: TCP
+    
+---
 
+apiVersion: extensoins/v1betal
+kind: Deployment
+metadata:
+ name: train-schedule-deployment
+ lables:
+  app: train-schedule
+spec:
+ replicas: 2
+ selectors:
+  matchLabels:
+   app: train-schedule
+ template:
+  metadata:
+   lables:
+    app: train-schedule
+  spec:
+   containers: 
+    - name: train-schedule
+      image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
+      ports:
+       - ContainerPort: 8080
+ 
